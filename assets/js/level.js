@@ -4,10 +4,9 @@ function Level() {
 	this.background.x = 0;
 	this.background.y = 0;
 	stage.addChildAt(this.background, 0);
-	this.route = new Route(5, 0);
-	this.placeNext = 500;
-	this.routeTemp = ['D', 'D', 'R', 'R', 'U', 'R', 'D', 'D', 'L', 'L', 'L', 'D', 'R', 'R', 'R', 'R', 'R', 'D'];
-	this.rind = 0;
+	this.route = new Route([{x: 5, y: 0, dir: 'D'}, {x: 5, y: 10, dir: 'R'}, {x: 20, y: 10, dir: 'D'}]);
+	var creep = new Creep(40);
+	this.route.startCreep(creep);
 }
 
 Level.prototype = {
@@ -17,10 +16,6 @@ Level.prototype = {
 		this.route.destructor();
 	},
 	update: function(e) {
-		if (e.time > this.placeNext && this.rind < this.routeTemp.length) {
-			this.route.rt(this.routeTemp[this.rind], 5);
-			this.placeNext += 500;
-			this.rind++;
-		}
+		this.route.update(e);
 	}
 }

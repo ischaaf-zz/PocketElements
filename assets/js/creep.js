@@ -1,16 +1,14 @@
-function Creep(route) {
-	this.route = route;
+function Creep(speed) {
 	this.index = 0;
 	this.sprite = new createjs.Shape();
-	this.sprite.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 10);
-	this.sprite.x = route[0].x;
-	this.sprite.y = route[0].y;
-	stage.add(this.sprite);
+	this.sprite.graphics.beginFill("Red").drawCircle(0, 0, 10);
+	this.speed = speed;
 }
 
 Creep.prototype = {
 	constructor: Creep,
-	update: function(time) {
-		
+	update: function(e) {
+		var delta = this.speed * (e.delta / 1000);
+		//this.sprite.x += this.speed * (e.delta / 1000);
 	}
 }
