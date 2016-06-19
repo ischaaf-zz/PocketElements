@@ -3,8 +3,11 @@ function Level() {
 	this.background.graphics.beginFill("DeepSkyBlue").drawRect(0, 0, STAGE_WIDTH, STAGE_HEIGHT);
 	this.background.x = 0;
 	this.background.y = 0;
-	stage.addChild(this.background);
-	this.route = new Route({x: 5, y: 0}, [{D: 10}, {R: 5}, {U: 3}, {R: 4}, {D: 17}]);
+	stage.addChildAt(this.background, 0);
+	this.route = new Route(5, 0);
+	this.placeNext = 500;
+	this.routeTemp = ['D', 'D', 'R', 'R', 'U', 'R', 'D', 'D', 'L', 'L', 'L', 'D', 'R', 'R', 'R', 'R', 'R', 'D'];
+	this.rind = 0;
 }
 
 Level.prototype = {
@@ -13,7 +16,11 @@ Level.prototype = {
 		stage.removeChild(this.background);
 		this.route.destructor();
 	},
-	update: function() {
-
+	update: function(e) {
+		if (e.time > this.placeNext && this.rind < this.routeTemp.length) {
+			this.route.rt(this.routeTemp[this.rind], 5);
+			this.placeNext += 500;
+			this.rind++;
+		}
 	}
 }
