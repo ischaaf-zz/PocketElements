@@ -11,18 +11,18 @@ function Route(directions) {
 	this.y = this.startY = directions[0].y;
 	this.createShape();
 
-	var dir = directions[0].dir;
+	var dir = this.parseDir(0);
 
 	// loop through remaining instructions
 	for (var i = 1; i < directions.length; i++) {
 		while (!(this.x == directions[i].x && this.y == directions[i].y)) {
 			if (!this.createShape(dir)) break;
 		}
-		dir = directions[i].dir;
+		dir = this.parseDir(i);
 	}
 
 	// if the last instruction left a direction, continue to the wall
-	if (dir != 'C') {
+	if (dir != 'End') {
 		while (this.x >= 0 && this.y >= 0 && this.x < STAGE_WIDTH_BLOCKS && this.y < STAGE_HEIGHT_BLOCKS) {
 			if (!this.createShape(dir)) break;
 		}
@@ -73,12 +73,45 @@ Route.prototype = {
 		creep.sprite.x = this.startX * BLOCK_SIZE + BLOCK_SIZE / 2;
 		creep.sprite.y = this.startY * BLOCK_SIZE + BLOCK_SIZE / 2;
 		stage.addChild(creep.sprite);
-		creep.dir = this.directions[0].dir;
+		creep.route = this;
+		creep.start();
 		this.creeps.push(creep);
+	},
+	endCreep: function(creep) {
+		stage.removeChild(creep.sprite);
+		var index = this.creeps.indexOf(creep);
+		// this.creeps.splice(index, 1);
+		this.creeps[index] = undefined;
 	},
 	update: function(e) {
 		for (var i = 0; i < this.creeps.length; i++) {
-			this.creeps[i].update(e);
+			if (this.creeps[i])
+				this.creeps[i].update(e);
+		}
+	},
+	parseDir: function(i) {
+		if (i == this.directions.length - 1) {
+			return 'End';
+		} else if (i < this.directions.length - 1) {
+			var p1 = this.directions[i];
+			var p2 = this.directions[i + 1];
+			if (p1.x == p2.x) {
+				if (p1.y < p2.y) {
+					return 'D';
+				} else {
+					return 'U';
+				}
+			} else if (p1.y == p2.y) {
+				if (p1.x < p2.x) {
+					return 'R';
+				} else {
+					return 'L';
+				}
+			} else {
+				throw "invalid path";
+			}
+		} else {
+			throw "index out of bounds: " + i + " ~ " + this.directions.length;
 		}
 	}
 }

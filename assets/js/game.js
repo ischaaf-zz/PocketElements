@@ -9,6 +9,7 @@ var BLOCK_SIZE          = 20;
 var STAGE_WIDTH_BLOCKS  = undefined;
 var STAGE_HEIGHT_BLOCKS = undefined;
 var gridLines = undefined;
+var P = createjs.Point;
 
 var level = undefined;
 
@@ -21,9 +22,10 @@ function init() {
 	STAGE_WIDTH  = stage.canvas.width;
 	STAGE_WIDTH_BLOCKS = STAGE_WIDTH / BLOCK_SIZE;
 	STAGE_HEIGHT_BLOCKS = STAGE_HEIGHT / BLOCK_SIZE;
-	gridLines = buildGrid();
-	stage.addChild(gridLines);
+	// gridLines = buildGrid();
+	// stage.addChild(gridLines);
 	level = new Level();
+	createjs.Ticker.setFPS(60);
 	createjs.Ticker.addEventListener("tick", update);
 }
 
